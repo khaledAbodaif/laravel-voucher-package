@@ -22,8 +22,8 @@ class VoucherController extends Controller
         try {
 
 //            return VoucherFactory::get('khaleds',User::find(1))->check()->apply(1)->get();
-           return  VoucherAudience::getTypes(2);
-//            return VoucherAudience::getUsersTable('users');
+//           return  VoucherAudience::types(2)->get();
+            return VoucherAudience::usersTable('users')->get();
 
         }catch(\Exception $e){
             return $e->getMessage();
