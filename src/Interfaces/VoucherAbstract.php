@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Khaleds\Voucher\Models\UserVoucher;
 use Khaleds\Voucher\Models\Voucher;
-use Khaleds\Voucher\Services\VoucherFactory;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 
 abstract class VoucherAbstract
     implements VoucherInterface
