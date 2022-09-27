@@ -31,12 +31,13 @@ class DefaultVoucher extends VoucherAbstract
                 }
             }
 
-            if ($pass)
-                return $this;
+            if (!$pass)
+                $this->voucher=null;
 
         }
 
-        throw new Exception("Invalid Voucher");
+        return $this;
+
     }
 
     public function append(array $data):mixed{

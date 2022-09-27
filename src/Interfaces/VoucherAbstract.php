@@ -6,6 +6,7 @@ namespace Khaleds\Voucher\Interfaces;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Khaleds\Voucher\Models\UserVoucher;
 use Khaleds\Voucher\Models\Voucher;
 use Khaleds\Voucher\Services\VoucherFactory;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -36,18 +37,17 @@ abstract class VoucherAbstract
             ->withCount(['Users' => function ($query)  {
                 $query->where('applicable_type', $this->model->getTable())
                     ->where('applicable_id', $this->model->getAttribute('id'))
-                    ->where('is_used', 0);
+                    ->where('is_used', 1);
 
             }])
             ->having('users_count', '<', DB::raw('max_uses_user'))
             ->first();
 
-
         return $this;
 
     }
 
-    public function apply(bool $is_used=null, string $voucher = null, Model $model = null): self
+    public function apply(bool $is_used, string $voucher = null, Model $model = null): self
     {
 
         if ($voucher && $model) {
@@ -56,21 +56,19 @@ abstract class VoucherAbstract
             $this->model = $model;
 
         }
-
         if ($this->voucher) {
-            Voucher::updateOrCreate(
+            UserVoucher::updateOrCreate(
                 [
                     'applicable_type' => $this->model->getTable(),
                     'applicable_id' => $this->model->getAttribute('id'),
                     'voucher_id' => $this->voucher->id,
-
+                    'is_used' => 0,
                 ]
                 ,
                 [
-
                     'amount' => $this->voucher->amount,
                     'is_fixed_amount' => $this->voucher->is_fixed,
-                    'is_used' => $is_used??0,
+                    'is_used' => $is_used,
                 ]);
 
             if ($is_used)
@@ -84,7 +82,10 @@ abstract class VoucherAbstract
     public function get():Voucher
     {
 
-        return $this->voucher;
+        if ($this->voucher)
+            return $this->voucher;
+
+        throw new \Exception("Voucher Has Limit");
     }
 
     abstract public function append(array $arguments):mixed;

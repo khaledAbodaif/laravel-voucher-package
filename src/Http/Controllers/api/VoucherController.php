@@ -20,7 +20,7 @@ class VoucherController extends Controller
 
         try {
 
-            return VoucherFactory::get('khaleds',User::find(1))->check()->get();
+            return VoucherFactory::get('khaleds',User::find(1))->check()->apply(1)->get();
 
         }catch(\Exception $e){
             return $e->getMessage();
