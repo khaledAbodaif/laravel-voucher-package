@@ -1,0 +1,28 @@
+{
+    "name": "khaleds/voucher",
+    "description": "Coupons and promotional codes generator for Laravel.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Khaleds\\Voucher\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "khaledAbodaif",
+            "email": "khaled.abodaif@yahoo.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "extra": {
+
+        "laravel": {
+            "providers": [
+                "Khaleds\\Voucher\\VoucherServiceProvider"
+            ]
+        }
+    }
+
+}
