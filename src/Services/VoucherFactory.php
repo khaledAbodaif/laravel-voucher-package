@@ -12,7 +12,7 @@ class VoucherFactory
 
 
 // if voucher model take id retuen object
-    public static function get($voucher,$model)
+    public static function get($voucher,$model,$amount)
     {
 
         $voucher=Voucher::with('implementation')->where('code',$voucher)->first();
@@ -22,7 +22,7 @@ class VoucherFactory
 
         $className= $voucher->implementation->class;
 
-        return new $className($voucher->code,$model);
+        return new $className($voucher->code,$model,$amount);
 
 
     }

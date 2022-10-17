@@ -19,7 +19,8 @@ abstract class VoucherAbstract
 
     public function __construct(
         protected string $code,
-        protected Model $model
+        protected Model $model,
+        protected float $amount
     )
     {}
 
@@ -32,6 +33,7 @@ abstract class VoucherAbstract
             ->where('code', $this->code)
             ->where('starts_at', '<=', now())
             ->where('expires_at', '>=', now())
+            ->where('amount_cap', '<=',$this->amount)
             ->whereRaw('uses < max_uses')
             ->withCount(['Users' => function ($query)  {
                 $query->where('applicable_type', $this->model->getTable())

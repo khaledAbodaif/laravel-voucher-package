@@ -57,6 +57,9 @@ class CreateVouchersTable extends Migration
             // When the voucher ends
             $table->timestamp( 'expires_at' );
 
+            // voucher amount to apply it if greater than cap
+            $table->double( 'amount_cap' )->default(1);
+
             $table->timestamps();
         });
     }
