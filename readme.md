@@ -5,26 +5,6 @@
 
 Coupons and voucher codes checker. you can create voucher with many conditions that fit your business.
 
-**Available Conditions**
-
-| column | description |
-|--|--|
-| code | coupon or voucher code |
-| is_available| check if this voucher available or not|
-|max_uses|the max number of using this voucher|
-|max_uses_user|the max number of using this voucher per single user|
-|starts_at|start date for this voucher to be published|
-|expires_at|end date for this voucher to be closed|
-
-all of this conditions the package checking it .
-
-> what about you have a coupon for a specific users ,vendors or customers beside the other conditions ofcourse  , or even i need to apply coupon for category , service or products all of them or specific ones  ?
-
-**voucher_implementation_id ;)**
-  this forigen id related with table takes [class path,value as json].
-  you can add your voucher audience as a morph table in **voucher_audiences** that tacks which usable_type as a table name, usable_id as model id ,is_all bool that mean all records in this table and voucher_id .
-  in the **voucher_implementations** table you can find the implementation record for each voucher the default one is applied .
-  the default implementation just check for model table ,id or is_all check in voucher_audiences table
 
 #  List of content
 
