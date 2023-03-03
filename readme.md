@@ -1,24 +1,23 @@
+
 ![enter image description here](https://t4.ftcdn.net/jpg/03/29/10/97/360_F_329109774_iTsyjzLU5O9cagJ9UhahhNF2ZdkW4OHc.jpg)
 
 # Laravel Voucher Package
 
-Coupons and voucher codes checker.
-you can create voucher with  many conditions that fit your besnies 
+Coupons and voucher codes checker. you can create voucher with many conditions that fit your business.
+
+**Available Conditions**
 
 | column | description |
 |--|--|
 | code | coupon or voucher code |
 | is_available| check if this voucher available or not|
-|uses|# how many times this voucher used till now|
-|max_uses|#how many times this voucher should use under any case|
-|max_uses_user|#how many times this voucher should use per single user|
-|voucher_implementation_id |tricky ?!!|
-|starts_at|start date for this voucher to publish|
-|expires_at|end date for this voucher to close it|
+|max_uses|the max number of using this voucher|
+|max_uses_user|the max number of using this voucher per single user|
+|starts_at|start date for this voucher to be published|
+|expires_at|end date for this voucher to be closed|
 
-all of this conditions the package check for and voucher code passes to it.
+all of this conditions the package checking it .
 
-> So what is the tricky thing ?!
 > what about you have a coupon for a specific users ,vendors or customers beside the other conditions ofcourse  , or even i need to apply coupon for category , service or products all of them or specific ones  ?
 
 **voucher_implementation_id ;)**
@@ -30,60 +29,81 @@ all of this conditions the package check for and voucher code passes to it.
 #  List of content
 
  - Installation
+ -  How Does It Work?
  - How to use
- - Implementation
- - OC Principle
- -  Tips
+
 
 
 # Installation
 
     composer require khaleds/voucher
 
+### Migrate table
+    php artisan make:migration
+### Seeder
+Add this to your **DatabaseSeeder** class in run method
+```php
+	use Khaleds\Voucher\Seeder\VoucherImplementaionSeeder;
+    
+    $this->call(VoucherImplementaionSeeder::class);
+```
+  
+  
+# How Does It Work? 
+
+ ### Vouchers table 
+ This table contain the voucher conditions like 
+| column | description |
+|--|--|
+| code | coupon or voucher code |
+| is_available| check if this voucher available or not|
+|max_uses|the max number of using this voucher|
+|max_uses_user|the max number of using this voucher per single user|
+|starts_at|start date for this voucher to be published|
+|expires_at|end date for this voucher to be closed|
+
+Other columns
+| column | description |
+|--|--|
+| discount_amount | The amount to discount |
+| is_fixed | Whether or not the "discount_amount" is a percentage or a fixed price |
+| max_uses | Number of users that use this voucher |
+| amount_cap | Amount to apply it if the price greater than cap |
+| uses | The total number of uses for this voucher |
+
+If you want more condition like specific models or ids like i want this voucher for all accounts table or users table or the users with some ids you can do that in this table
+
+ ### Vouchers Audiences table 
+ This table contain 
+ | column | description |
+|--|--|
+| usable_type | Table name |
+ | usable_id | The id that you want to use voucher |
+ | voucher_id | The voucher that you want to apply this condition on it |
+ | is_all | If you want to make all users in this table can use the voucher |
+ 
+
+> the relation is one to many so you can add many ids if you want per voucher
+
+ ### User Voucher table 
+ This table contain the users that applied to the voucher added when you use function **apply**
 # How to use
 
 you have 2 static classes 
 
 ```php
-	//factory class to get witch implementation class you want
-	//check for defualt conditions
-	// return the voucher
-    VoucherFactory::get(string $code,Model $user)->check()->get()
+	// $code  : voucher code
+	// model  : which model uses this voucher
+	// amount : the amount that you want to apply voucher on it
+	// return : voucher object if passed all conditions ex if not passed 
+    VoucherFactory::get(string $code,Model $user,float $amount)->check()->get()
     
     // if you pass 0 that mean the voucher applied and not used
 	// applay will add the model to voucher if passes the conditions and increment uses column
     VoucherFactory::get(string $code,Model $user)->check()->apply(1)->get()
 
 ```
+### If you want to avoid all checks and apply the voucher
 ```php
-    //return all typs for this voucher
-    // like products,users,categories
-    VoucherAudience::types(int $voucherId)->get()
-    
-    //return array of all records for that table
-    VoucherAudience::usersTable(string $table)->get()
-    
+VoucherFactory::get(string $code,Model $user)->applay(bool $is_used, string $code, Model $model))
 ```
-
-> you can use 
-> VoucherFactory::get(string $code,Model $user)->applay(bool $is_used, string, Model $model)) if you want to avoid all checks
-
-# OC Principle
-
-as you can see i am just handling default voucher maybe you have different implementation for  the voucher per category or service .
-so as open closed principle you should't edit or add on my package to place your implementation you should extends VoucherAbstract which have abstract method append and default function (apply,check,get) you can polymorphism any function you want or use append class to take arguments
-and apply any condition you want .
-**steps**
-
- - add record in voucher_implementations takes class path ,value as json array 
- - add voucher record with your implementation id 
- - happy Voucher ;)
-
-# Tips
-
- 1. `Ctrl+Alt+Shift+U` in my package src/services with phpStorm ide to see uml diagram to understand the flow
- 2. `phpmyadmin` operations/designer to see erd diagram to understand the schema
- 
-
-> you can use this 2 things in your daily work to understand others code will
->  
