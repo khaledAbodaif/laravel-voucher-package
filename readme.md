@@ -5,12 +5,33 @@
 
 Coupons and voucher codes checker. you can create voucher with many conditions that fit your business.
 
+**Available Conditions**
+
+| column | description |
+|--|--|
+| code | coupon or voucher code |
+| is_available| check if this voucher available or not|
+|max_uses|the max number of using this voucher|
+|max_uses_user|the max number of using this voucher per single user|
+|starts_at|start date for this voucher to be published|
+|expires_at|end date for this voucher to be closed|
+
+all of this conditions the package checking it .
+
+> what about you have a coupon for a specific users ,vendors or customers beside the other conditions ofcourse  , or even i need to apply coupon for category , service or products all of them or specific ones  ?
+
+**voucher_implementation_id ;)**
+  this forigen id related with table takes [class path,value as json].
+  you can add your voucher audience as a morph table in **voucher_audiences** that tacks which usable_type as a table name, usable_id as model id ,is_all bool that mean all records in this table and voucher_id .
+  in the **voucher_implementations** table you can find the implementation record for each voucher the default one is applied .
+  the default implementation just check for model table ,id or is_all check in voucher_audiences table
 
 #  List of content
 
- - Installation
+ -  Installation
  -  How Does It Work?
- - How to use
+ -  How to use
+ -  Advanced use
 
 
 
@@ -80,10 +101,30 @@ you have 2 static classes
     
     // if you pass 0 that mean the voucher applied and not used
 	// applay will add the model to voucher if passes the conditions and increment uses column
-    VoucherFactory::get(string $code,Model $user)->check()->apply(1)->get()
+    VoucherFactory::get(string $code,Model $user,float $amount)->check()->apply(1)->get()
 
 ```
 ### If you want to avoid all checks and apply the voucher
 ```php
-VoucherFactory::get(string $code,Model $user)->applay(bool $is_used, string $code, Model $model))
+VoucherFactory::get(string $code,Model $user,float $amount)->apply(bool $is_used, string $code, Model $model))
 ```
+
+# Advanced use
+> what about you have an extra conditions like you want to add voucher with only country ,service , products or categories
+
+### Using 
+```php
+VoucherFactory::get(string $code,Model $user)->check()
+// it tacks table name as a key and array of ids
+->append(  
+  [    
+  "categories" => [1,2,3],  
+  "products" => [1,2,3],  
+  ]  
+)
+->apply(1)->get()
+```
+ you just need to add your audiences in **Vouchers Audiences table** 
+
+ if you want to overwrite the implementation class change the class path in **voucher_implementations** table and extend from DefaultVoucher class
+
