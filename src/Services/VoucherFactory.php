@@ -9,9 +9,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class VoucherFactory
 {
-
-
-// if voucher model take id retuen object
+    
     public static function get($voucher,$model,$amount)
     {
 
