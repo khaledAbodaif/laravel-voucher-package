@@ -10,9 +10,7 @@ use Khaleds\Voucher\Models\UserVoucher;
 use Khaleds\Voucher\Models\Voucher;
 
 
-abstract class VoucherAbstract
-    implements VoucherInterface
-//    implements VoucherAudienceInterface
+abstract class VoucherAbstract implements VoucherInterface
 {
 
     public ?Voucher $voucher;
@@ -67,7 +65,7 @@ abstract class VoucherAbstract
                 ]
                 ,
                 [
-                    'amount' => $this->voucher->amount,
+                    'amount' => $this->voucher->discount_amount,
                     'is_fixed_amount' => $this->voucher->is_fixed,
                     'is_used' => $is_used,
                 ]);

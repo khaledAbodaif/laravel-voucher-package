@@ -19,10 +19,10 @@ class CreateVouchersTable extends Migration
             $table->string( 'code' )->unique()->nullable( );
 
             // The human readable voucher code name
-            $table->json( 'name' );
+            $table->string( 'name' );
 
             // The description of the voucher - Not necessary
-            $table->json( 'description' )->nullable( );
+            $table->string( 'description' )->nullable( );
 
             //The Image fr design
             $table->string( 'image' )->nullable( );

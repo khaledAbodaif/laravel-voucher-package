@@ -18,7 +18,7 @@ return new class extends Migration
 
             //morph relation if the audience user ,vendor
             // contribute category,service,product
-            $table->morphs('usable');
+            $table->morphs('usable')->nullable();
 
             $table->foreignId('voucher_id')->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
 
